@@ -109,174 +109,73 @@ stock_data <- function(stock_sign) {
     
   }
   
-  yahoo_finance <- function(stock_sign) {
+  yahoo <- function(stock_sign){
     
-    yahoo_PE_EPS <- function(stock_sign){
-      stock_sign <- as.character(stock_sign)
-      yahoo_url <- paste0("https://finance.yahoo.com/quote/", stock_sign, "?p=", stock_sign)
-      stock <- htmltab(doc = yahoo_url, which = 2, header = 0, colNames = c("N.A.", "PE"), length())
-      print("Yahoo Finance")
-      stock_PE <- stock[3,2]
-      PE <- paste0("PE = ", stock_PE)
-      print(PE)
-      stock_EPS <- stock[4,2]
-      EPS <- paste0("EPS = ", stock_EPS)
-      print(EPS) 
-    }
+    yahoo_url <- paste0("https://finance.yahoo.com/quote/", stock_sign, "?p=", stock_sign)
+    stock <- htmltab(doc = yahoo_url, which = 2, header = 0, colNames = c("N.A.", "PE"), length())
     
-    yahoo_fair_value <- function(stock_sign){
-      
-      stock_sign <- as.character(stock_sign)
-      yahoo_url <- paste0("https://finance.yahoo.com/quote/", stock_sign, "?p=", stock_sign)
-      
-      yahoo_url <- read_html(yahoo_url)
-      yahoo_url <- yahoo_url %>%
-        html_nodes("div") %>%
-        html_text()
-      
-      fair_value <- yahoo_url[93]
-      fair_value <- gsub(".*Est","",fair_value)
-      fair_value <- gsub(",","",fair_value)
-      fair_value <- as.numeric(fair_value)
-      
-      yahoo_fair_value <- paste0("Price Target: $", fair_value)
-      
-      print(yahoo_fair_value)
-      
-    }
+    pe <- stock[3,2]
+    pe <- paste0("PE = ", pe)
     
-    yahoo_returns <- function(stock_sign){
-      yahoo_url <- paste0("https://finance.yahoo.com/quote/", stock_sign, "?p=", stock_sign)
-      url <- read_html(yahoo_url)
-      words <- url %>%
-        html_nodes(".IbBox") %>%
-        html_text() %>%
-        as.data.frame()
-      
-      est_return <- words[21,1]
-      est_return <- as.character(est_return)
-      est_return_num <- gsub("% Est. Return", "", est_return)
-      est_return_num <- as.numeric(est_return_num)
-      
-      value <- words[19,1]
-      value <- as.character(value)
-      value <- gsub(".*XX", "", value)
-      value <- gsub("1.*","",value)
-      value <- gsub("2.*","",value)
-      value <- gsub("3.*","",value)
-      value <- gsub("4.*","",value)
-      value <- gsub("5.*","",value)
-      value <- gsub("6.*","",value)
-      value <- gsub("7.*","",value)
-      value <- gsub("8.*","",value)
-      value <- gsub("9.*","",value)
-      value <- gsub("0.*","",value)
-      value <- gsub("Premium.*","",value)
-      
-      print(est_return)
-      print(value)
-      
-    }
+    eps <- stock[4,2]
+    eps <- paste0("EPS = ", eps)
     
-    yahoo_estimates <- function(stock_sign){
-      
-      yahoo_PE_EPS(stock_sign)
-      yahoo_fair_value(stock_sign)
-      yahoo_returns(stock_sign)
-      
-    }
+    url <- read_html(yahoo_url)
+    words2 <- url %>%
+      html_nodes("div") %>%
+      html_text() %>%
+      as.data.frame()
     
-    yahoo_estimates(stock_sign)
+    patternA <- words2[73,1]
+    patternA <- gsub("(ish).*", "\\1", patternA)
+    
+    patternB <- words2[74,1]
+    
+    pattern <- paste0("Pattern = ", patternA, ' (', patternB, ')')
+    
+    value <- words2[103,1]
+    return <- words2[104,1]
+    value = paste0(value, ' (', return, ')')
+    
+    fair_value <- url %>%
+      html_nodes("div") %>%
+      html_text()
+    
+    fv <- fair_value[93]
+    fv <- gsub(".*Est","",fv)
+    fv <- gsub(",","",fv)
+    fv <- as.numeric(fv)
+    
+    fv <- paste0("Price Target: $", fv)
+    
+    print("Yahoo Finance")
+    print(pe)
+    print(eps)
+    print(fv)
+    print(pattern)
+    print(value)
     
   }
   
   cnn_money <- function(stock_sign) {
-    print("CNN Money")
+    
     cnn_url <- paste0("https://money.cnn.com/quote/forecast/forecast.html?symb=", stock_sign)
-    thepage = readLines(cnn_url)
+    url <- read_html(cnn_url)
     
-    # first part of sentence
-    mypattern = '<p>([^<]*)<span class="posData">([^<]*)</span>([^<]*)</p>'
-    datalines = grep(mypattern, thepage, value = TRUE)
-    getexpr = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg = gregexpr(mypattern,datalines)
-    matches = mapply(getexpr,datalines,gg)
-    result = gsub(mypattern,'\\1', matches)
-    names(result) = NULL
-    result1 <- result[1]
+    words1 <- url %>%
+      html_nodes("p") %>%
+      html_text() %>%
+      as.data.frame()
     
-    # Evaluation Percentage
-    mypattern2 = '<span class="posData">([^<]*)</span>([^<]*)</p>'
-    datalines2 = grep(mypattern2, thepage, value = TRUE)
-    getexpr2 = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg2 = gregexpr(mypattern2,datalines2)
-    matches2 = mapply(getexpr2,datalines2,gg2)
-    result2 = gsub(mypattern2,'\\1',matches2)
-    names(result2) = NULL
-    result2 <- result2[1]
+    forecast <- words1[2,1]
+    forecast <- gsub("rating..*","\\2",forecast)
     
-    # last part of sentence
-    mypattern3 = '</span>([^<]*)</p>'
-    datalines3 = grep(mypattern3, thepage, value = TRUE)
-    getexpr3 = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg3 = gregexpr(mypattern3,datalines3)
-    matches3 = mapply(getexpr3,datalines3,gg3)
-    result3 = gsub(mypattern3,'\\1',matches3)
-    names(result3) = NULL
-    result3 <- result3[1]
+    rec <- words1[3,1] 
+    rec <- gsub("Move.*","\\1",rec)
     
-    # first part of analyst recommendations
-    mypattern4 = '<p>([^<]*)<strong'
-    datalines4 = grep(mypattern4, thepage, value = TRUE)
-    getexpr4 = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg4 = gregexpr(mypattern4,datalines4)
-    matches4 = mapply(getexpr4,datalines4,gg4)
-    result4 = gsub(mypattern4,'\\1', matches4)
-    names(result4) = NULL
-    result4 <- result4[1]
-    
-    # analyst recommendation
-    mypattern5 = '<strong class="wsod_rating">([^<]*)</strong>'
-    datalines5 = grep(mypattern5, thepage, value = TRUE)
-    getexpr5 = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg5 = gregexpr(mypattern5,datalines5)
-    matches5 = mapply(getexpr5,datalines5,gg5)
-    result5 = gsub(mypattern5,'\\1', matches5)
-    names(result5) = NULL
-    result5 <- result5[1]
-    
-    # rating changes
-    mypattern6 = '</strong>([^<]*)<span class="wsod_rating">'
-    datalines6 = grep(mypattern6, thepage, value = TRUE)
-    getexpr6 = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg6 = gregexpr(mypattern6,datalines6)
-    matches6 = mapply(getexpr6,datalines6,gg6)
-    result6 = gsub(mypattern6,'\\1', matches6)
-    names(result6) = NULL
-    result6 <- result6[1]
-    
-    # past rating
-    mypattern7 = '<span class="wsod_rating">([^<]*)</span>'
-    datalines7 = grep(mypattern7, thepage, value = TRUE)
-    getexpr7 = function(s,g)substring(s,g,g+attr(g,'match.length')-1)
-    gg7 = gregexpr(mypattern7,datalines7)
-    matches7 = mapply(getexpr7,datalines7,gg7)
-    result7 = gsub(mypattern7,'\\1', matches7)
-    names(result7) = NULL
-    result7 <- result7[1]
-    
-    cnn_url2 <- paste0("https://money.cnn.com/quote/quote.html?symb=", stock_sign)
-    cnn_PE <- htmltab(doc = cnn_url2, which = 4, header = 0)
-    cnn_PE <- cnn_PE[5,2]
-    cnn_PE <- as.numeric(cnn_PE)
-    cnn_pe <- paste0("PE = ", cnn_PE)
-    
-    # combining sentences
-    results1 <- paste0(result1, result2, result3) 
-    results2 <- paste0(result4, result5, result6, result7, " rating.")
-    print(cnn_pe)
-    print(results1)
-    print(results2)
+    print("CNN Money")
+    print(forecast)
+    print(rec)
     
   }
   
@@ -284,7 +183,7 @@ stock_data <- function(stock_sign) {
     zacks_stock_price(stock_sign)
     finviz_stock_price(stock_sign)
     market_watch(stock_sign)
-    yahoo_finance(stock_sign)
+    yahoo(stock_sign)
     cnn_money(stock_sign)
     
   }
@@ -293,10 +192,17 @@ stock_data <- function(stock_sign) {
   
 }
 
-stock_data("qd")
+stock_data("mbt")
 
+stock_data("este")
 
 stock_data("sbow")
+
+stock_data("qd")
+
+stock_data("finv")
+
+stock_data("zm")
 
 stock_data("azek")
 
@@ -343,3 +249,4 @@ stock_data("baba")
 
 stock_data("hx")
 
+stock_data("jfin")
