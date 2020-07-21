@@ -5,7 +5,7 @@ library(htmltab)
 library(rvest)
 
 stock_data <- function(stock_sign) {
-  
+
   zacks_stock_price <- function(stock_sign) {
     stock_sign <- as.character(stock_sign)
     mw_url <- paste0("https://www.zacks.com/stock/quote/", stock_sign)
@@ -43,7 +43,6 @@ stock_data <- function(stock_sign) {
     stock_avg_rec_text <- "Analyst Recommendation (1=Buy, 5=Sell)"
     stock_avg_rec <- stock_avg_rec[1,2]
     
-    print(stock_sign)
     print("Zack's Investment Research Recommendation")
     print(stock_rec)
     print(stock_avg_rec_text)
@@ -180,6 +179,7 @@ stock_data <- function(stock_sign) {
   }
   
   stock_analysis <- function(stock_sign){
+    print(stock_sign)
     zacks_stock_price(stock_sign)
     finviz_stock_price(stock_sign)
     market_watch(stock_sign)
@@ -212,8 +212,8 @@ stock_data("chu")
 
 stock_data("finv")
 
-# long term
-stock_data("mbt")
+# gives error
+stock_data("baba")
 
 stock_data("qd")
 
@@ -244,8 +244,6 @@ stock_data("nvln")
 stock_data("wmt")
 
 stock_data("phio")
-
-stock_data("baba")
 
 stock_data("hx")
 
