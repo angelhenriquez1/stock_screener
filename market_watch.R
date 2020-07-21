@@ -38,4 +38,3 @@ market_watch <- function(stock_sign) {
 }
 
 market_watch("GOOG")
-
