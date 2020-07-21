@@ -52,4 +52,3 @@ yahoo <- function(stock_sign){
   
 }
 
-yahoo("GOOG")
