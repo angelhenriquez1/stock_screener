@@ -3,6 +3,7 @@ library(tidyverse)
 library(rvest)
 
 finviz_stock_price <- function(stock_sign) {
+  
   stock_sign <- as.character(stock_sign)
   fv_url <- paste0("https://finviz.com/quote.ashx?t=", stock_sign)
   stock_rec <- htmltab(doc = fv_url, which = 9, header = 0)

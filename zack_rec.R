@@ -4,6 +4,7 @@ library(htmltab)
 library(tidyr)
 
 zacks_stock_price <- function(stock_sign) {
+  
   stock_sign <- as.character(stock_sign)
   mw_url <- paste0("https://www.zacks.com/stock/quote/", stock_sign)
   stock_rec <- htmltab(doc = mw_url, which = 6, header = 0)

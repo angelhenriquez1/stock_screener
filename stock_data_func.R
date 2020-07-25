@@ -7,6 +7,7 @@ library(rvest)
 stock_data <- function(stock_sign) {
 
   zacks_stock_price <- function(stock_sign) {
+    
     stock_sign <- as.character(stock_sign)
     mw_url <- paste0("https://www.zacks.com/stock/quote/", stock_sign)
     stock_rec <- htmltab(doc = mw_url, which = 6, header = 0)
@@ -53,6 +54,7 @@ stock_data <- function(stock_sign) {
   }
   
   finviz_stock_price <- function(stock_sign) {
+    
     stock_sign <- as.character(stock_sign)
     fv_url <- paste0("https://finviz.com/quote.ashx?t=", stock_sign)
     stock_rec <- htmltab(doc = fv_url, which = 9, header = 0)
@@ -76,35 +78,37 @@ stock_data <- function(stock_sign) {
   
   market_watch <- function(stock_sign) {
     
-    stock_sign <- as.character(stock_sign)
-    market_watch_url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/analystestimates")
-    stock_data <- htmltab(doc = market_watch_url, which = 1, header = 0)
-    stock_rec <- stock_data[1,2]
-    stock_target <- stock_data[1,4]
-    market_watch_rec <- paste0("Analyst Recommendation: ", stock_rec)
-    market_watch_price <- paste0("Price Target: $", stock_target)
+    url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/analystestimates")
+    stock_data <- htmltab(doc = url, which = 1, header = 0)
     
-    market_watch_url2 <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/profile")
-    thepage = readLines(market_watch_url2)
+    rec <- stock_data[1,2]
+    rec <- paste0("Analyst Recommendation: ", rec)
+    
+    pt <- stock_data[1,4]
+    pt <- paste0("Price Target: $", pt)
+    
+    url2 <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/profile")
+    thepage = readLines(url2)
     mypattern = '<p class="data lastcolumn">([^<]*)</p>'
-    datalines = grep(mypattern, thepage, value = TRUE)
-    PE <- datalines[2]
-    PE <- PE %>% str_squish()
-    PE <- gsub("<p class=\"data lastcolumn\"",'',PE)
-    PE <- gsub(">",'',PE)
-    PE <- gsub("</p",'',PE)
-    pe <-  paste0("PE = ", PE)
     
-    market_watch_url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/financials")
-    stock_data <- htmltab(doc = market_watch_url, which = 2, header = 0)
-    EPS <- stock_data[38,6]
-    eps <- paste0("EPS = ", EPS)
+    pe = grep(mypattern, thepage, value = TRUE)
+    pe <- pe[2]
+    pe <- pe %>% str_squish()
+    pe <- gsub("<p class=\"data lastcolumn\"",'',pe)
+    pe <- gsub(">",'', pe)
+    pe <- gsub("</p",'', pe)
+    pe <- paste0("PE = ", pe)
+    
+    url3 <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/financials")
+    eps <- htmltab(doc = url3, which = 2, header = 0)
+    eps <- eps[38,6]
+    eps <- paste0("EPS = ", eps)
     
     print("Market Watch")
     print(pe)
     print(eps)
-    print(market_watch_rec)
-    print(market_watch_price)
+    print(rec)
+    print(pt)
     
   }
   
@@ -119,40 +123,37 @@ stock_data <- function(stock_sign) {
     eps <- stock[4,2]
     eps <- paste0("EPS = ", eps)
     
+    yr_est <- stock[8,2]
+    yr_est <- paste0("1 Year Price Target: $", yr_est)
+    
     url <- read_html(yahoo_url)
-    words2 <- url %>%
-      html_nodes("div") %>%
+    words <- url %>%
+      html_nodes(".IbBox") %>%
       html_text() %>%
       as.data.frame()
     
-    patternA <- words2[73,1]
-    patternA <- gsub("(ish).*", "\\1", patternA)
+    est_return <- words[20,1]
+    est_return <- as.character(est_return)
     
-    patternB <- words2[74,1]
+    # side 1 of info
+    est_return <- gsub(".*XX", "\\1", est_return)
+    # side 2 of info
+    est_return <- gsub("Premium.*", "\\1", est_return)
     
-    pattern <- paste0("Pattern = ", patternA, ' (', patternB, ')')
+    est_return <- ifelse(grepl(est_return, "-", fixed = FALSE) == TRUE, 
+                         gsub("((\\d*))%"," i \\1%", est_return),
+                         gsub("((\\d*))-"," i -\\1", est_return))
     
-    value <- words2[103,1]
-    return <- words2[104,1]
-    value = paste0(value, ' (', return, ')')
-    
-    fair_value <- url %>%
-      html_nodes("div") %>%
-      html_text()
-    
-    fv <- fair_value[93]
-    fv <- gsub(".*Est","",fv)
-    fv <- gsub(",","",fv)
-    fv <- as.numeric(fv)
-    
-    fv <- paste0("Price Target: $", fv)
+    # isolating fair value from % return
+    value_ <-  sub(" i.*", "", est_return)    
+    perc_return <-  sub(".*i ", "", est_return)    
+    estimates <- paste0(value_, ' (', perc_return, ')')
     
     print("Yahoo Finance")
     print(pe)
     print(eps)
-    print(fv)
-    print(pattern)
-    print(value)
+    print(yr_est)
+    print(estimates)
     
   }
   
@@ -179,6 +180,7 @@ stock_data <- function(stock_sign) {
   }
   
   stock_analysis <- function(stock_sign){
+    
     print(stock_sign)
     zacks_stock_price(stock_sign)
     finviz_stock_price(stock_sign)
@@ -191,6 +193,10 @@ stock_data <- function(stock_sign) {
   stock_analysis(stock_sign)
   
 }
+
+stock_data("lulu")
+
+stock_data("syna")
 
 stock_data("mbt")
 
