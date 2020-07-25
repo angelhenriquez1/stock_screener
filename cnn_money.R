@@ -1,4 +1,3 @@
-#rm(list = ls())
 library(rvest)
 library(htmltab)
 
@@ -24,4 +23,4 @@ cnn_money <- function(stock_sign) {
   
 }
 
-cnn_money("PVAC")
+cnn_money("baba")
