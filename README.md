@@ -6,6 +6,6 @@ Currently, simply insert a stock symbol in quotes (ex: "GOOG") into the stock_da
 
 This code is not to be sold and if replicated, changed, and/or used by you or someone you know, please reference me by name and github account, Angel Henriquez and @angelhenriquez1, respectively.
 
-If you have any recommendations about how to make my code more efficient or grow this idea, feel free to contact me on LinkedIn (https://www.linkedin.com/in/angelhenriquez1/).
+If you have any recommendations on how to make my code more efficient or grow this idea, feel free to contact me on LinkedIn (https://www.linkedin.com/in/angelhenriquez1/).
 
 Thanks and enjoy!
