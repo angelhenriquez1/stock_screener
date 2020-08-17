@@ -51,4 +51,4 @@ zacks_stock_price <- function(stock_sign) {
   
 }
 
-zacks_stock_price("pvac")
+zacks_stock_price("goog")
