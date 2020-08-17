@@ -1,8 +1,6 @@
-#rm(list = ls())
 library(tidyverse)
 library(htmltab)
 library(rvest)
-setwd("~/Desktop/Stock_Calculator")
 
 yahoo <- function(stock_sign){
   
@@ -48,8 +46,8 @@ yahoo <- function(stock_sign){
   print(estimates)
 
 }
-yahoo("LULU")
-yahoo("sam")
+yahoo_finance("LULU")
+yahoo_finance("sam")
 
 yahoo_url = "https://finance.yahoo.com/quote/goog?p=goog"
 
