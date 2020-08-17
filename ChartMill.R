@@ -1,12 +1,13 @@
+library(rvest)
+
 #https://www.chartmill.com/stock/quote/GOOG/analyst-ratings
 stock_sign = "GOOG"
 
 stock_sign <- as.character(stock_sign)
 cm_url <- paste0("https://www.chartmill.com/stock/quote/", stock_sign, "/profile")
 # recommendation for stock symbol
-stock_rec <- htmltab(doc = cm_url, which = 3, header = 0)
+stock_rec <- htmltab(doc = cm_url, which = 1, header = 0)
 
-library(rvest)
 
 #/html/body/app-root/app-menu/div/mat-sidenav-container/mat-sidenav-content/app-stock/div[2]/div[1]/app-property-display/div/mat-card/mat-card-content/div/div/div/div[5]/div[2]/table
 url <- "https://www.chartmill.com/stock/quote/GOOG/profile"
