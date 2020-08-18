@@ -2,7 +2,7 @@ library(htmltab)
 library(tidyverse)
 library(rvest)
 
-finviz_stock_price <- function(stock_sign) {
+finviz <- function(stock_sign) {
   
   stock_sign <- as.character(stock_sign)
   fv_url <- paste0("https://finviz.com/quote.ashx?t=", stock_sign)
@@ -25,4 +25,4 @@ finviz_stock_price <- function(stock_sign) {
   
 }
 
-finviz_stock_price("GOOG")
+finviz("GOOG")
