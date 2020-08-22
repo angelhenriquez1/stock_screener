@@ -201,7 +201,7 @@ stock_data <- function(stock_sign) {
   stock_analysis <- function(stock_sign){
     
     financhill(stock_sign)
-    zacks_stock_price(stock_sign)
+    #zacks_stock_price(stock_sign) #website is down
     finviz_stock_price(stock_sign)
     market_watch(stock_sign)
     yahoo_finance(stock_sign)
@@ -213,87 +213,4 @@ stock_data <- function(stock_sign) {
   
 }
 
-stock_data("iivi")
-
-stock_data("mfc")
-
-stock_data("este")
-
-stock_data("qrtea")
-
-stock_data("srce")
-
-stock_data("msft")
-
-stock_data("wex")
-
-stock_data("fvrr")
-
-stock_data("goog")
-
-stock_data("lulu")
-
-stock_data("mxc")
-
-stock_data("parr")
-
-stock_data("lulu")
-
-stock_data("syna")
-
-stock_data("mbt")
-
-stock_data("este")
-
-stock_data("sbow")
-
-stock_data("qd")
-
-stock_data("mcd")
-
-stock_data("zm")
-
-stock_data("azek")
-
-stock_data("xyf")
-
-stock_data("chu")
-
-stock_data("finv")
-
-# gives error
-stock_data("baba")
-
-stock_data("qd")
-
 stock_data("doyu")
-
-stock_data("dao")
-
-stock_data("nkla")
-
-stock_data("alb")
-
-stock_data("stmp")
-
-stock_data("knsa")
-
-stock_data("cemi")
-
-stock_data("osk")
-
-stock_data("cece")
-
-stock_data("curo")
-
-stock_data("mwa")
-
-stock_data("nvln")
-
-stock_data("wmt")
-
-stock_data("phio")
-
-stock_data("hx")
-
-stock_data("jfin")
