@@ -1,13 +1,7 @@
-rm(list = ls())
 setwd("~/Desktop/Stock_Calculator")
 library(tidyverse)
 library(htmltab)
 library(rvest)
-
-# list of stocks
-#stock_symbol <- read_delim("nasdaqtraded.txt", "|", escape_double = FALSE)
-#stock_symbol <- stock_symbol[c(2)]
-#stock_symbol <- stock_symbol[1:5,]
 
 stock_data <- function(stock_list) {
   
