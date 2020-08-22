@@ -3,6 +3,8 @@ library(tidyverse)
 library(htmltab)
 library(tidyr)
 
+
+#website is down
 zacks_stock_price <- function(stock_sign) {
   
   stock_sign <- as.character(stock_sign)
