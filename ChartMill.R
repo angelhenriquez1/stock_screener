@@ -27,7 +27,7 @@ chartmill_stock_price <- function(stock_sign) {
   print("Chartmill Investment Research")
   print(stock_rec)
 }
-chartmill_stock_price("GOOG")
+chartmill_stock_price("FINV")
 
 #<div _ngcontent-wpx-c299="">The short term is neutral, but the long term trend is still positive. Not much to worry about for now.</div>
 # mypattern = '<p>([^<]*)<span class="posData">([^<]*)</span>([^<]*)</p>'
