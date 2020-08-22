@@ -59,17 +59,152 @@ stock_recs <- function(stock_sign) {
     
   }
   
-  market_watch <- function(stock_sign) {
+  stock_invest <- function(stock_sign){
     
-    url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/analystestimates")
-    stock_data <- htmltab(doc = url, which = 1, header = 0)
+    url <- paste0("https://stockinvest.us/technical-analysis/", stock_sign)
+    url <- read_html(url)
     
-    rec <- stock_data[1,2]
+    rec <- url %>%
+      html_nodes("span") %>%
+      html_text() %>%
+      as.data.frame()
     
-    print("Market Watch")
-    print("Analyst Recommendation")
+    names(rec)[1] <- "words"
+    
+    rec <- rec %>% filter(grepl("candidate", words))
+    
+    rec <-   as.data.frame(rec)
+    rec <- gsub("candidate.*", "", rec$words)
+    print("Stock Invest")
     print(rec)
+    
+  }
 
+market_watch <- function(stock_sign){
+  url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/analystestimates")
+  url <- read_html(url)
+  
+  stock_data <- url %>%
+    html_nodes("td") %>%
+    html_text() %>%
+    str_squish() %>%
+    as.data.frame()
+  
+  rec <- stock_data[2,1]
+  rec <- sub(" .*", "", rec)
+  print("Market Watch")
+  print(rec)
+}
+  
+markets_insider <- function(stock_sign){
+  
+  url <- paste0("https://markets.businessinsider.com/analyst/", stock_sign, "/all")
+  url <- read_html(url)
+  
+  rec <- url %>%
+    html_nodes("span") %>%
+    html_text() %>%
+    as.data.frame()
+  
+  rec <- rec[!(rec$. == ""), ]
+  rec <- as.data.frame(rec)
+  rec <- rec[2,1]
+  rec <- sub(" .*", "", rec)
+  rec <- ifelse(rec == "×", "NA", rec)
+  print("Markets Insider")
+  print("1 = Buy | 5 = Sell")
+  print(rec)
+  
+}
+  
+bar_chart <- function(stock_sign){
+  
+  url <-  paste0("https://www.barchart.com/stocks/quotes/", stock_sign)
+  url <- read_html(url)
+  
+  words <- url %>%
+    html_nodes("a") %>%
+    html_text() %>%
+    str_squish() %>%
+    as.data.frame()
+  
+  names(words)[1] = "rec"
+  
+  # removing blank rows
+  words1 <- words[!apply(is.na(words) | words == "", 1, all),]
+  words1 <- as.data.frame(words1)
+  
+  strong_buy <- subset(words1$words1, words1$words1=="Strong buy")
+  strong_buy <- as.character(strong_buy)
+  
+  buy <- subset(words1$words1, words1$words1=="buy")
+  buy <- as.character(buy)
+  
+  weak_buy <- subset(words1$words1, words1$words1=="Weak buy")
+  weak_buy <- as.character(weak_buy)
+  
+  hold <- subset(words1$words1, words1$words1=="hold")
+  hold <- as.character(hold)
+  
+  weak_sell <- subset(words1$words1, words1$words1=="Weak sell")
+  weak_sell <- as.character(weak_sell)
+  
+  sell <- subset(words1$words1, words1$words1=="sell")
+  sell <- as.character(sell)
+  
+  strong_sell <- subset(words1$words1, words1$words1=="Strong sell")
+  strong_sell <- as.character(strong_sell)
+  
+  opinion <- rbind(strong_buy, buy, all = TRUE)
+  opinion <- rbind(opinion, weak_buy, all = TRUE)
+  opinion <- rbind(opinion, hold, all=TRUE)
+  opinion <- rbind(opinion, weak_sell, all = TRUE)
+  opinion <- rbind(opinion, sell, all = TRUE)
+  opinion <- rbind(opinion, strong_sell, all = TRUE)
+  
+  opinion <- as.data.frame(opinion)
+  
+  opinion <- opinion %>% 
+    filter(!grepl('TRUE', opinion$V1))
+  
+  print("Barchart Recommendation")
+  print(opinion)
+  
+}
+
+  market_beat <- function(stock_sign){
+    url <- paste0("https://www.marketbeat.com/stocks/NYSE/", stock_sign, "/price-target/")
+    url <- read_html(url)
+    
+    rec <- url %>%
+      html_nodes("td") %>%
+      html_text() %>%
+      as.data.frame()
+    
+    rec <- rec[2,1]
+    rec <- sub(" .*", "", rec)
+    rec <- ifelse(rec == "Read", "Not NYSE", rec)
+    print("Market Beat")
+    print(rec)
+  }
+  
+  wallet_investor <- function(stock_sign){
+    
+    url <- paste0("https://walletinvestor.com/stock-forecast/", stock_sign, "-stock-prediction")
+    url <- read_html(url)
+    
+    words <- url %>%
+      html_nodes("strong") %>%
+      html_text() %>%
+      as.data.frame()
+    
+    stock_name <- words[3,1]
+    recommendation <- words[4,1]
+    
+    recommendation <- paste0(stock_name, "is a ", recommendation, " long term (1 year) investment.")
+    print("Wallet Investor")
+    print(recommendation)
+    
   }
   
   yahoo_finance <- function(stock_sign){
@@ -126,9 +261,14 @@ stock_recs <- function(stock_sign) {
     
     print(stock_sign)
     financhill(stock_sign)
-    zacks_stock_price(stock_sign)
+    #zacks_stock_price(stock_sign) # webpage is down
     finviz_stock_price(stock_sign)
+    stock_invest(stock_sign)
+    markets_insider(stock_sign)
+    market_beat(stock_sign)
+    bar_chart(stock_sign)
     yahoo_finance(stock_sign)
+    wallet_investor(stock_sign)
     market_watch(stock_sign)
     cnn_money(stock_sign)
     
@@ -138,4 +278,4 @@ stock_recs <- function(stock_sign) {
   
 }
 
-stock_recs("iivi")
+stock_recs("low")
