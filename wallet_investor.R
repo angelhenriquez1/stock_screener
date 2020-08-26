@@ -26,7 +26,7 @@ wallet_investor("baba")
 
 
 # condition 1
-stock_sign = "baba"
+stock_sign = "yy"
 url <- paste0("https://stocks2.com/", stock_sign, "-stock/buy-or-sell/")
 url <- read_html(url)
 
@@ -36,12 +36,11 @@ words <- url %>%
   str_squish() %>%
   as.data.frame()
 
-names(words)[1] <- "words1"
+names(words)[1] <- "words"
 
+words$words <- as.character(words$words)
 view(words)
-words$words <- as.data.frame(words$words)
-
-rec1 <- words$words %>% filter(grepl('Currently', words$words))
+view(rec1)
 
 # condition 2
 
@@ -64,11 +63,6 @@ rec2 <- words2 %>% filter(grepl('Currently', words2$words))
 view(rec1)
 
 view(rec2)
-
-
-
-
-
 
 
 
