@@ -17,11 +17,11 @@ stock_recs <- function(stock_sign) {
       html_text() %>%
       as.data.frame()
     
-    rec <- words[c(5),]
+    rec <- words[c(7),]
     rec <- as.character(rec)
     rec <- unlist(strsplit(rec, split = "\t", fixed = TRUE))[9]
     
-    print("Financhill")
+    print("Financhill Recommendation")
     print(rec)
     
   }
@@ -80,21 +80,27 @@ stock_recs <- function(stock_sign) {
     
   }
 
-market_watch <- function(stock_sign){
-  url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/analystestimates")
-  url <- read_html(url)
-  
-  stock_data <- url %>%
-    html_nodes("td") %>%
-    html_text() %>%
-    str_squish() %>%
-    as.data.frame()
-  
-  rec <- stock_data[2,1]
-  rec <- sub(" .*", "", rec)
-  print("Market Watch")
-  print(rec)
-}
+  market_watch <- function(stock_sign) {
+    
+    url <- paste0("https://www.marketwatch.com/investing/stock/", stock_sign, "/analystestimates")
+    url <- read_html(url)
+    
+    stock_data <- url %>%
+      html_nodes("td") %>%
+      html_text() %>%
+      str_squish() %>%
+      as.data.frame()
+    
+    rec <- stock_data[2,1]
+    rec <- sub(" .*", "", rec)
+    rec <- as.character(rec)
+    rec <- ifelse(is.na(rec), 'No Data', rec)
+    
+    print("Market Watch")
+    print("Analyst Recommendation")
+    print(rec)
+    
+  }
   
 markets_insider <- function(stock_sign){
   
@@ -106,11 +112,14 @@ markets_insider <- function(stock_sign){
     html_text() %>%
     as.data.frame()
   
-  rec <- rec[!(rec$. == ""), ]
+  names(rec)[1] <- "list"
+  
+  rec <- rec[!(rec$list == ""), ]
   rec <- as.data.frame(rec)
-  rec <- rec[2,1]
+  rec <- rec[!(rec$rec == "Futures"), ]
   rec <- sub(" .*", "", rec)
-  rec <- ifelse(rec == "×", "NA", rec)
+  rec <- rec[1]
+  rec <- ifelse(rec == "×", "No Data", rec)
   print("Markets Insider")
   print("1 = Buy | 5 = Sell")
   print(rec)
@@ -278,4 +287,4 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("low")
+stock_recs("baba")
