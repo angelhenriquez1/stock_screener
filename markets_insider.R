@@ -15,7 +15,7 @@ markets_insider <- function(stock_sign){
   rec <- as.data.frame(rec)
   rec <- rec[!(rec$rec == "Futures"), ]
   rec <- sub(" .*", "", rec)
-  rec <- rec[1]
+  rec <- rec[2]
   rec <- ifelse(rec == "×", "No Data", rec)
   print("Markets Insider")
   print("1 = Buy | 5 = Sell")
@@ -23,4 +23,4 @@ markets_insider <- function(stock_sign){
   
 }
 
-markets_insider("baba")
+markets_insider("slf")
