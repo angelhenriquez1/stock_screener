@@ -47,21 +47,24 @@ yahoo_finance <- function(stock_sign){
   perc_return <-  sub(".*i ", "", est_return)    
   estimates <- paste0(value_, ' (', perc_return, ')')
   print(stock_sign)
-  ifelse(perc_return > 25, estimates, "")
-  #print(estimates)
+  ifelse(perc_return > 25, print(estimates), "")
+  # print(estimates)
   
 }
 
 yahoo_finance("baba")
 
 data1 <- as.character(stock_names$stock_symbols)
+#tryCatch()
 
 for ( i in data1 ){
 
-  yahoo_finance(i)
-  print(" ")
-
+  tryCatch(
+  yahoo_finance(i))
+  
 }
+
+# the code above runs
 
 # use transmute instead of subsets
 a <- transmute(data)
