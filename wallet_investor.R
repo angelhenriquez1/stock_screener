@@ -1,6 +1,31 @@
 # stocks.com 
 
-# problem is the different wording and positioning of results
+# this works
+
+wallet_investor <- function(stock_sign){
+  
+  url <- paste0("https://walletinvestor.com/stock-forecast/", stock_sign, "-stock-prediction")
+  url <- read_html(url)
+  
+  words <- url %>%
+    html_nodes("strong") %>%
+    html_text() %>%
+    as.data.frame()
+  
+  stock_name <- words[3,1]
+  recommendation <- words[4,1]
+  
+  recommendation <- paste0(stock_name, "is a ", recommendation, " long term (1 year) investment.")
+  print("Wallet Investor")
+  print(recommendation)
+  
+}
+
+
+
+
+
+# this one has problem with wording positioning
 
 wallet_investor <- function(stock_sign){
   
@@ -31,7 +56,7 @@ url <- paste0("https://stocks2.com/", stock_sign, "-stock/buy-or-sell/")
 url <- read_html(url)
 
 words <- url %>%
-  html_nodes("p") %>%
+  html_nodes("strong") %>%
   html_text() %>%
   str_squish() %>%
   as.data.frame()
@@ -40,11 +65,11 @@ names(words)[1] <- "words"
 
 words$words <- as.character(words$words)
 view(words)
-view(rec1)
+
 
 # condition 2
 
-stock_sign2 = "virt"
+stock_sign2 = "goog"
 url2 <- paste0("https://stocks2.com/", stock_sign2, "-stock/buy-or-sell/")
 url2 <- read_html(url2)
 
@@ -57,12 +82,17 @@ words2 <- url2 %>%
 names(words2)[1] <- "words"
 
 words2$words <- as.character(words2$words)
+view(words2)
 
-rec2 <- words2 %>% filter(grepl('Currently', words2$words))
+relevant_data <- words2[words2$words == "trading"]
 
-view(rec1)
+words_data <- words2[!apply(words2 == "", 1, all),]
 
-view(rec2)
+view(words_data)
+
+data <- words_data[2]
+
+view(data)
 
 
 
