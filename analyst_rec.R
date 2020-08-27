@@ -102,29 +102,29 @@ stock_recs <- function(stock_sign) {
     
   }
   
-markets_insider <- function(stock_sign){
-  
-  url <- paste0("https://markets.businessinsider.com/analyst/", stock_sign, "/all")
-  url <- read_html(url)
-  
-  rec <- url %>%
-    html_nodes("span") %>%
-    html_text() %>%
-    as.data.frame()
-  
-  names(rec)[1] <- "list"
-  
-  rec <- rec[!(rec$list == ""), ]
-  rec <- as.data.frame(rec)
-  rec <- rec[!(rec$rec == "Futures"), ]
-  rec <- sub(" .*", "", rec)
-  rec <- rec[1]
-  rec <- ifelse(rec == "×", "No Data", rec)
-  print("Markets Insider")
-  print("1 = Buy | 5 = Sell")
-  print(rec)
-  
-}
+  markets_insider <- function(stock_sign){
+    
+    url <- paste0("https://markets.businessinsider.com/analyst/", stock_sign, "/all")
+    url <- read_html(url)
+    
+    rec <- url %>%
+      html_nodes("span") %>%
+      html_text() %>%
+      as.data.frame()
+    
+    names(rec)[1] <- "list"
+    
+    rec <- rec[!(rec$list == ""), ]
+    rec <- as.data.frame(rec)
+    rec <- rec[!(rec$rec == "Futures"), ]
+    rec <- sub(" .*", "", rec)
+    rec <- rec[2]
+    rec <- ifelse(rec == "×", "No Data", rec)
+    print("Markets Insider")
+    print("1 = Buy | 5 = Sell")
+    print(rec)
+    
+  }
   
 bar_chart <- function(stock_sign){
   
@@ -287,4 +287,33 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("baba")
+stock_recs("goog")
+
+
+
+# loops
+stock_signs <- c("yy", "doyu", "iivi", "fvrr", "baba", "bill")
+
+for ( i in stock_signs){
+  
+  stock_recs(i)
+  print(" ")
+  print(" ")
+  print(" ")
+  
+  
+}
+
+
+# trefis website for price forecasts
+# terminology explanation
+# https://finance.zacks.com/seven-ways-analyze-stock-4845.html#:~:text=A%20common%20method%20to%20analyzing,its%20competitors%20and%20industry%20standards
+# stock apis for more data
+# https://rapidapi.com/collection/stock-market-apis
+# explanations of investing mindset
+# https://learn.robinhood.com/
+
+
+
+
+
