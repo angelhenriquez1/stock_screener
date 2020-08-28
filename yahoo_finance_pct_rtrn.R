@@ -1,3 +1,6 @@
+library(tidyverse)
+library(htmltab)
+library(rvest)
 
 # finding list of all stock symbols
 other <- read_delim("http://ftp.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt",
@@ -44,15 +47,16 @@ yahoo_finance <- function(stock_sign){
   
   # isolating fair value from % return
   value_ <-  sub(" i.*", "", est_return)    
-  perc_return <-  sub(".*i ", "", est_return)    
+  perc_return <-  sub(".*i ", "", est_return)
   estimates <- paste0(value_, ' (', perc_return, ')')
   print(stock_sign)
   ifelse(perc_return > 25, print(estimates), "")
+  print(" ")
   # print(estimates)
   
 }
 
-yahoo_finance("baba")
+yahoo_finance("yumc")
 
 data1 <- as.character(stock_names$stock_symbols)
 #tryCatch()
