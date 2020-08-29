@@ -66,7 +66,7 @@ data1 <- as.character(stock_names$stock_symbols)
 data1 <- unique(data1)
 
 # worked up to axu, will rerun code starting at amk
-data1 = data1[-c(1:1356)]
+data1 = data1[-c(1:1426)]
 view(data1)
 
 for ( i in data1 ){
