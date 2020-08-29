@@ -287,7 +287,7 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("cnf")
+stock_recs("eaf")
 
 # trefis website for price forecasts
 # terminology explanation
