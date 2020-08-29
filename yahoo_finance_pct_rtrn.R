@@ -1,3 +1,4 @@
+
 library(tidyverse)
 library(htmltab)
 library(rvest)
@@ -15,6 +16,11 @@ stock_names2 <- nasdaq[1]
 names(stock_names2)[1] <- "stock_symbols"
 
 stock_names <- rbind(stock_names1, stock_names2)
+
+stock_names <- gsub("\\$.*","", stock_names$stock_symbols)
+
+stock_names <- as.data.frame(as.character(stock_names))
+
 rm(other)
 rm(nasdaq)
 rm(stock_names1)
@@ -56,9 +62,13 @@ yahoo_finance <- function(stock_sign){
   
 }
 
-yahoo_finance("yumc")
+yahoo_finance("baba")
+
+names(stock_names)[1] <- "stock_symbols"
 
 data1 <- as.character(stock_names$stock_symbols)
+data1 <- unique(data1)
+
 #tryCatch()
 
 for ( i in data1 ){
@@ -114,3 +124,34 @@ for ( i in data1 ){
 
 
 
+stock_sign = "GOOG"
+stock_sign <- as.character(stock_sign)
+stock_sign <- tolower(stock_sign)
+yahoo_url <- paste0("https://finance.yahoo.com/quote/", stock_sign, "?p=", stock_sign)
+
+url <- read_html(yahoo_url)
+words <- url %>%
+  html_nodes(".IbBox") %>%
+  html_text() %>%
+  as.data.frame()
+
+est_return <- words[20,1]
+est_return <- as.character(est_return)
+
+# removing left side
+est_return <- gsub(".*XX", "\\1", est_return)
+# removing right side
+est_return <- gsub("Premium.*", "\\1", est_return)
+
+est_return <- ifelse(grepl(est_return, "-", fixed = FALSE) == TRUE, 
+                     gsub("((\\d*))%"," i \\1%", est_return),
+                     gsub("((\\d*))-"," i -\\1", est_return))
+
+# isolating fair value from % return
+value_ <-  sub(" i.*", "", est_return)    
+perc_return <-  sub(".*i ", "", est_return)
+estimates <- paste0(value_, ' (', perc_return, ')')
+print(stock_sign)
+ifelse(perc_return > 25, print(estimates), "")
+print(" ")
+# print(estimates)
