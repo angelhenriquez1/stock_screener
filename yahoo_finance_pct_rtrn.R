@@ -65,6 +65,10 @@ names(stock_names)[1] <- "stock_symbols"
 data1 <- as.character(stock_names$stock_symbols)
 data1 <- unique(data1)
 
+
+# worked up to amk, will rerun code starting at amk
+data1 = data1[-1:161,]
+
 #tryCatch()
 
 for ( i in data1 ){
@@ -73,6 +77,8 @@ for ( i in data1 ){
   yahoo_finance(i))
   
 }
+
+view(data1)
 
 # the code above runs
 
