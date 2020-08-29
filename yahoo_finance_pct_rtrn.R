@@ -68,6 +68,10 @@ view(data1)
 # worked up to amk, will rerun code starting at amk
 data1 = data1[-c(1:150)]
 
+
+# worked up to amk, will rerun code starting at amk
+data1 = data1[-1:161,]
+
 #tryCatch()
 
 for ( i in data1 ){
