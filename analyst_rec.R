@@ -287,23 +287,7 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("goog")
-
-
-
-# loops
-stock_signs <- c("yy", "doyu", "iivi", "fvrr", "baba", "bill")
-
-for ( i in stock_signs){
-  
-  stock_recs(i)
-  print(" ")
-  print(" ")
-  print(" ")
-  
-  
-}
-
+stock_recs("bcsf")
 
 # trefis website for price forecasts
 # terminology explanation
@@ -312,8 +296,3 @@ for ( i in stock_signs){
 # https://rapidapi.com/collection/stock-market-apis
 # explanations of investing mindset
 # https://learn.robinhood.com/
-
-
-
-
-

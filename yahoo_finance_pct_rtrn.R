@@ -65,10 +65,8 @@ names(stock_names)[1] <- "stock_symbols"
 data1 <- as.character(stock_names$stock_symbols)
 data1 <- unique(data1)
 view(data1)
-# worked up to amk, will rerun code starting at amk
-data1 = data1[-c(1:150)]
-
-#tryCatch()
+# worked up to axu, will rerun code starting at amk
+data1 = data1[-c(1:309)]
 
 for ( i in data1 ){
 
