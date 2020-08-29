@@ -287,7 +287,7 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("bcsf")
+stock_recs("cnf")
 
 # trefis website for price forecasts
 # terminology explanation
