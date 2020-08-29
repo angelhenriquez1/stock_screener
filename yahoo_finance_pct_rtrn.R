@@ -1,4 +1,3 @@
-
 library(tidyverse)
 library(htmltab)
 library(rvest)
@@ -14,11 +13,8 @@ stock_names1 <- other[1]
 names(stock_names1)[1] <- "stock_symbols"
 stock_names2 <- nasdaq[1]
 names(stock_names2)[1] <- "stock_symbols"
-
 stock_names <- rbind(stock_names1, stock_names2)
-
 stock_names <- gsub("\\$.*","", stock_names$stock_symbols)
-
 stock_names <- as.data.frame(as.character(stock_names))
 
 rm(other)
