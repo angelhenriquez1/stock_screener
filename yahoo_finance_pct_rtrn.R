@@ -67,6 +67,7 @@ data1 <- unique(data1)
 
 # worked up to axu, will rerun code starting at amk
 data1 = data1[-c(1:1894)]
+
 view(data1)
 
 for ( i in data1 ){
@@ -78,6 +79,8 @@ for ( i in data1 ){
 
 
 view(data1)
+
+
 
 # the code above runs
 
@@ -122,37 +125,3 @@ for ( i in data1 ){
   
 }
 
-
-
-
-stock_sign = "GOOG"
-stock_sign <- as.character(stock_sign)
-stock_sign <- tolower(stock_sign)
-yahoo_url <- paste0("https://finance.yahoo.com/quote/", stock_sign, "?p=", stock_sign)
-
-url <- read_html(yahoo_url)
-words <- url %>%
-  html_nodes(".IbBox") %>%
-  html_text() %>%
-  as.data.frame()
-
-est_return <- words[20,1]
-est_return <- as.character(est_return)
-
-# removing left side
-est_return <- gsub(".*XX", "\\1", est_return)
-# removing right side
-est_return <- gsub("Premium.*", "\\1", est_return)
-
-est_return <- ifelse(grepl(est_return, "-", fixed = FALSE) == TRUE, 
-                     gsub("((\\d*))%"," i \\1%", est_return),
-                     gsub("((\\d*))-"," i -\\1", est_return))
-
-# isolating fair value from % return
-value_ <-  sub(" i.*", "", est_return)    
-perc_return <-  sub(".*i ", "", est_return)
-estimates <- paste0(value_, ' (', perc_return, ')')
-print(stock_sign)
-ifelse(perc_return > 25, print(estimates), "")
-print(" ")
-# print(estimates)
