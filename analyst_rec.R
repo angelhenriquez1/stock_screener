@@ -287,7 +287,10 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("eaf")
+stock_recs("curo")
+
+stock_recs("vrt")
+
 
 # trefis website for price forecasts
 # terminology explanation
