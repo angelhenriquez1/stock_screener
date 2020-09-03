@@ -291,7 +291,7 @@ stock_recs("rxt")
 
 stock_recs("ayi")
 
-stock_recs("bcsf")
+stock_recs("docu")
 
 # trefis website for price forecasts
 # terminology explanation
