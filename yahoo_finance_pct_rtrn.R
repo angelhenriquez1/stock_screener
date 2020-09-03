@@ -58,7 +58,7 @@ yahoo_finance <- function(stock_sign){
   
 }
 
-yahoo_finance("baba")
+yahoo_finance("tk")
 
 names(stock_names)[1] <- "stock_symbols"
 
