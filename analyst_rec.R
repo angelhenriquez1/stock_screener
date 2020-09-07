@@ -271,7 +271,7 @@ bar_chart <- function(stock_sign){
     print(stock_sign)
     financhill(stock_sign)
     #zacks_stock_price(stock_sign) # webpage is down
-    finviz_stock_price(stock_sign)
+    #finviz_stock_price(stock_sign)
     stock_invest(stock_sign)
     #markets_insider(stock_sign)
     market_beat(stock_sign)
@@ -287,11 +287,7 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("rxt")
-
-stock_recs("ayi")
-
-stock_recs("docu")
+stock_recs("goog")
 
 # trefis website for price forecasts
 # terminology explanation
