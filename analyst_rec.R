@@ -287,7 +287,7 @@ bar_chart <- function(stock_sign){
   
 }
 
-stock_recs("goog")
+stock_recs("lvgo")
 
 # trefis website for price forecasts
 # terminology explanation
